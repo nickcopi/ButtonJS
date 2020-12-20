@@ -1,12 +1,10 @@
 let Button;
 let ButtonRender;
+let BasicButtonRender;
+let ImageButtonRenderer;
 let ButtonManager;
+let ImageButton;
 (()=>{
-
-
-
-
-
 
 	ButtonManager = class{
 		constructor(){
@@ -33,11 +31,21 @@ let ButtonManager;
 		render(ctx){
 			this.buttons.forEach(button=>button.render(ctx));
 		}
-
 	}
+
 
 	ButtonRenderer = class {
 		constructor(){
+
+		}
+		render(button,ctx){
+
+		}
+	}
+
+	BasicButtonRenderer = class extends ButtonRenderer{
+		constructor(){
+			super();
 			this.font = 'Arial';
 			this.fontSize = 16;
 			this.backgroundColor = 'black';
@@ -50,11 +58,20 @@ let ButtonManager;
 			ctx.font = `${this.fontSize}px ${this.font}`;
 			const x = button.x + button.width/2 - ctx.measureText(button.text).width/2;
 			const y = button.y + button.height/2 + this.fontSize/4;
-			console.log(x,y)
 			ctx.fillText(button.text,x,y);
 		}
 	}
-	const defaultRenderer = new ButtonRenderer();
+	class ImageButtonRenderer extends ButtonRenderer{
+		constructor(image){
+			super();
+			this.image = image;
+		}
+		render(button,ctx){
+			console.log(this.image,button.x,button.y,button.width,button.height);
+			ctx.drawImage(this.image,button.x,button.y,button.width,button.height);
+		}
+	}
+	const defaultRenderer = new BasicButtonRenderer();
 
 
 	Button = class {
@@ -82,5 +99,15 @@ let ButtonManager;
 			this.clickEvents.forEach(e=>e());
 		}
 
+	}
+
+	/*
+	 * Special case of button that renders an image and takes no text
+	 *
+	 * */
+	ImageButton = class extends Button{
+		constructor(x, y, width, height, image){
+			super(x,y,width,height,'',new ImageButtonRenderer(image));
+		}
 	}
 })()
