@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<script src="Button.js"></script>
+		<script>
+			let canvas;
+			let ctx;
+			const init = ()=>{
+				canvas = document.getElementById('canvas');
+				ctx = canvas.getContext('2d');
+				const button = new Button(30,100,500,300,'Test');
+				button.render(ctx);
+			}
+			window.addEventListener('load',()=>{
+				init();
+			});
+		</script>
+	</head>
+	<body>
+		<canvas id="canvas" width="1280" height="720"></canvas>
+	</body>
+</html>
