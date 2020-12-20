@@ -7,8 +7,17 @@
 			const init = ()=>{
 				canvas = document.getElementById('canvas');
 				ctx = canvas.getContext('2d');
-				const button = new Button(30,100,500,300,'Test');
-				button.render(ctx);
+				const buttonManager = new ButtonManager();
+				canvas.addEventListener('click',buttonManager.onClick.bind(buttonManager));
+				const button = buttonManager.addButton(new Button(30,100,500,300,'Test'));
+				const button2 = buttonManager.addButton(new Button(500,600,100,30,'Extra'));
+				button.addClickEvent(()=>{
+					alert('Hi from button one!');
+				});
+				button2.addClickEvent(()=>{
+					alert('Greetings from button two!');
+				});
+				buttonManager.render(ctx);
 			}
 			window.addEventListener('load',()=>{
 				init();
