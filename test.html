@@ -14,6 +14,7 @@
 				const img = new Image();
 				img.src = 'test.png';
 				const imageButton = buttonManager.addButton(new ImageButton(40,500,120,40,img));
+				const blankButton = buttonManager.addButton(new BlankButton(40,500,120,40));
 				button.addClickEvent(()=>{
 					alert('Hi from button one!');
 				});
@@ -22,6 +23,9 @@
 				});
 				imageButton.addClickEvent(()=>{
 					alert('Thanks for clicking an image!');
+				});
+				blankButton.addClickEvent(()=>{
+					alert('This button is invisible and sitting over the image');
 				});
 				img.addEventListener('load',()=>{
 					buttonManager.render(ctx);

@@ -1,9 +1,9 @@
 let Button;
 let ButtonRender;
 let BasicButtonRender;
-let ImageButtonRenderer;
 let ButtonManager;
 let ImageButton;
+let BlankButton;
 (()=>{
 
 	ButtonManager = class{
@@ -108,6 +108,16 @@ let ImageButton;
 	ImageButton = class extends Button{
 		constructor(x, y, width, height, image){
 			super(x,y,width,height,'',new ImageButtonRenderer(image));
+		}
+	}
+
+	/*
+	 * Special case of button that renders nothing
+	 *
+	 * */
+	BlankButton = class extends Button{
+		constructor(x, y, width, height){
+			super(x,y,width,height,'',new ButtonRenderer());
 		}
 	}
 })()
