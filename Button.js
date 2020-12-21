@@ -10,8 +10,10 @@ let BlankButton;
 		constructor(canvas){
 			this.buttons = [];
 			this.lastMouse = {x:0,y:0};
-			canvas.addEventListener('click', this.onClick.bind(this));
-			canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+			this.onClickFunc = this.onClick.bind(this);
+			this.onMouseMoveFunc = this.onMouseMove.bind(this);
+			canvas.addEventListener('click', this.onClickFunc);
+			canvas.addEventListener('mousemove', this.onMouseMoveFunc);
 		}
 		onMouseMove(e){
 			const [x,y] = [e.offsetX, e.offsetY];
@@ -54,6 +56,10 @@ let BlankButton;
 		}
 		render(ctx){
 			this.buttons.forEach(button=>button.render(ctx));
+		}
+		destroy(){
+			canvas.removeEventListener('click', this.onClickFunc);
+			canvas.removeEventListener('mousemove', this.onMouseMoveFunc);
 		}
 	}
 
