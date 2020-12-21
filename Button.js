@@ -7,8 +7,32 @@ let BlankButton;
 (()=>{
 
 	ButtonManager = class{
-		constructor(){
+		constructor(canvas){
 			this.buttons = [];
+			this.lastMouse = {x:0,y:0};
+			canvas.addEventListener('click', this.onClick.bind(this));
+			canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+		}
+		onMouseMove(e){
+			const [x,y] = [e.offsetX, e.offsetY];
+			let anyButton = false;
+			this.buttons.forEach(button=>{
+				let collidesNow = this.collide({x,y,width:1,height:1},button);
+				let collidesBefore = this.collide({
+					x:this.lastMouse.x,
+					y:this.lastMouse.y,
+					width:1,
+					height:1
+				},button);
+				if(collidesNow && !collidesBefore)
+					button.mouseOver();
+				if(collidesBefore && !collidesNow)
+					button.mouseOut();
+				anyButton = anyButton || collidesNow;
+			});
+			if(anyButton) canvas.style.cursor = 'pointer';
+			else canvas.style.cursor = 'default';
+			this.lastMouse = {x,y};
 		}
 		onClick(e){
 			this.buttons.forEach(button=>{
@@ -71,8 +95,6 @@ let BlankButton;
 			ctx.drawImage(this.image,button.x,button.y,button.width,button.height);
 		}
 	}
-	const defaultRenderer = new BasicButtonRenderer();
-
 
 	Button = class {
 		constructor(x, y, width, height, text, renderer){
@@ -83,8 +105,10 @@ let BlankButton;
 			this.text = text;
 			this.renderer = renderer;
 			if(!renderer)
-				this.renderer = defaultRenderer;
+				this.renderer = new BasicButtonRenderer();
 			this.clickEvents = [];
+			this.mouseOutEvents = [];
+			this.mouseOverEvents = [];
 		}
 		addClickEvent(e){
 			this.clickEvents.push(e);
@@ -92,11 +116,23 @@ let BlankButton;
 		removeClickEvent(e){
 			this.clickEvents.filter(ev=> ev !== e);
 		}
+		addMouseOutEvent(e){
+			this.mouseOutEvents.push(e);
+		}
+		addMouseOverEvent(e){
+			this.mouseOverEvents.push(e);
+		}
 		render(ctx){
 			this.renderer.render(this,ctx);
 		}
 		click(){
 			this.clickEvents.forEach(e=>e());
+		}
+		mouseOut(){
+			this.mouseOutEvents.forEach(e=>e());
+		}
+		mouseOver(){
+			this.mouseOverEvents.forEach(e=>e());
 		}
 
 	}

@@ -7,8 +7,7 @@
 			const init = ()=>{
 				canvas = document.getElementById('canvas');
 				ctx = canvas.getContext('2d');
-				const buttonManager = new ButtonManager();
-				canvas.addEventListener('click',buttonManager.onClick.bind(buttonManager));
+				const buttonManager = new ButtonManager(canvas);
 				const button = buttonManager.addButton(new Button(30,100,500,300,'Test'));
 				const button2 = buttonManager.addButton(new Button(500,600,100,30,'Extra'));
 				const img = new Image();
@@ -20,6 +19,9 @@
 				});
 				button2.addClickEvent(()=>{
 					alert('Greetings from button two!');
+				});
+				button2.addMouseOverEvent(()=>{
+					console.log('hi');
 				});
 				imageButton.addClickEvent(()=>{
 					alert('Thanks for clicking an image!');
